@@ -157,9 +157,7 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
             .setContentIntent(notificationPendingIntent)
 
         // Set the Channel ID for Android O.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId(CHANNEL_ID) // Channel ID
-        }
+        builder.setChannelId(CHANNEL_ID) // Channel ID
 
         // Dismiss notification once the user touches it.
         builder.setAutoCancel(true)

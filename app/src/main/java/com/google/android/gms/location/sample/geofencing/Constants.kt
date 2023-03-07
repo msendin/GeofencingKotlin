@@ -47,6 +47,6 @@ internal object Constants {
         BAY_AREA_LANDMARKS["SFO"] = LatLng(41.6082, 0.6231)
 
         // Googleplex.
-        BAY_AREA_LANDMARKS["GOOGLE"] = LatLng(41.6082, 0.6231)
+        BAY_AREA_LANDMARKS["GOOGLE"] = LatLng(41.38, 0.41)
     }
 }

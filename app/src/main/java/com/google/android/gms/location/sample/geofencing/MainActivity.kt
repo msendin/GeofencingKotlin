@@ -72,11 +72,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnCompleteListen
     /**
      * Used when requesting to add or remove geofences.
      */
-    private var mGeofencePendingIntent: PendingIntent? = null
+    private lateinit var mGeofencePendingIntent: PendingIntent
 
     // Buttons for kicking off the process of adding or removing geofences.
-    private var mAddGeofencesButton: Button? = null
-    private var mRemoveGeofencesButton: Button? = null
+    private lateinit var mAddGeofencesButton: Button
+    private lateinit var mRemoveGeofencesButton: Button
     private var mPendingGeofenceTask = PendingGeofenceTask.NONE
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,14 +88,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnCompleteListen
         // Get the UI widgets.
         mAddGeofencesButton = binding.addGeofencesButton
         mRemoveGeofencesButton = binding.removeGeofencesButton
-        mAddGeofencesButton!!.setOnClickListener(this)
-        mRemoveGeofencesButton!!.setOnClickListener(this)
+        mAddGeofencesButton.setOnClickListener(this)
+        mRemoveGeofencesButton.setOnClickListener(this)
 
         // Empty list for storing geofences.
         mGeofenceList = ArrayList()
 
         // Initially set the PendingIntent used in addGeofences() and removeGeofences() to null.
-        mGeofencePendingIntent = null
+        //mGeofencePendingIntent = null
         setButtonsEnabledState()
 
         // Get the geofences used. Geofence data is hard coded in this sample.
@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnCompleteListen
             // for ActivityCompat#requestPermissions for more details.
             return
         }
-        mGeofencingClient!!.addGeofences(geofencingRequest, geofencePendingIntent!!)
+        mGeofencingClient!!.addGeofences(geofencingRequest, geofencePendingIntent)
             .addOnCompleteListener(this)
     }
     /**
@@ -197,7 +197,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnCompleteListen
             showSnackbar(getString(R.string.insufficient_permissions))
             return
         }
-        mGeofencingClient!!.removeGeofences(geofencePendingIntent!!).addOnCompleteListener(this)
+        mGeofencingClient!!.removeGeofences(geofencePendingIntent).addOnCompleteListener(this)
     }
 
     /**
@@ -229,12 +229,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnCompleteListen
      * @return A PendingIntent for the IntentService that handles geofence transitions.
      */
     @get:SuppressLint("UnspecifiedImmutableFlag")
-    private val geofencePendingIntent: PendingIntent?
+    private val geofencePendingIntent: PendingIntent
         get() {
             // Reuse the PendingIntent if we already have it.
-            if (mGeofencePendingIntent != null) {
-                return mGeofencePendingIntent
-            }
+            //if (mGeofencePendingIntent != null) {
+                //return mGeofencePendingIntent
+            //}
             val intent = Intent(this, GeofenceBroadcastReceiver::class.java)
             // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
             // addGeofences() and removeGeofences().
@@ -277,11 +277,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnCompleteListen
      */
     private fun setButtonsEnabledState() {
         if (geofencesAdded) {
-            mAddGeofencesButton!!.isEnabled = false
-            mRemoveGeofencesButton!!.isEnabled = true
+            mAddGeofencesButton.isEnabled = false
+            mRemoveGeofencesButton.isEnabled = true
         } else {
-            mAddGeofencesButton!!.isEnabled = true
-            mRemoveGeofencesButton!!.isEnabled = false
+            mAddGeofencesButton.isEnabled = true
+            mRemoveGeofencesButton.isEnabled = false
         }
     }
 
@@ -351,11 +351,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnCompleteListen
      * Return the current state of the permissions needed.
      */
     private fun checkPermissions(): Boolean {
-        val permissionState = ActivityCompat.checkSelfPermission(
+        val permissionFineState = ActivityCompat.checkSelfPermission(
             this,
             Manifest.permission.ACCESS_FINE_LOCATION
         )
-        return permissionState == PackageManager.PERMISSION_GRANTED
+        val permissionCoarseState = ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+
+        return ((permissionFineState == PackageManager.PERMISSION_GRANTED) || (permissionCoarseState == PackageManager.PERMISSION_GRANTED))
     }
 
     private fun requestPermissions() {
