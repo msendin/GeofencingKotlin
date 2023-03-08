@@ -43,10 +43,10 @@ internal object Constants {
     val BAY_AREA_LANDMARKS = HashMap<String, LatLng>()
 
     init {
-        // San Francisco International Airport.
+        // EPS.
         BAY_AREA_LANDMARKS["SFO"] = LatLng(41.6082, 0.6231)
 
         // Googleplex.
-        BAY_AREA_LANDMARKS["GOOGLE"] = LatLng(41.38, 0.41)
+        //BAY_AREA_LANDMARKS["GOOGLE"] = LatLng(41.6082, 0.6231)
     }
 }
